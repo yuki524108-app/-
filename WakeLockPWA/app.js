@@ -40,6 +40,8 @@ let gainNode = null;
 let scannerStream = null;
 let scanLoop = null;
 let qrMatched = false;
+const scannerCanvas = document.createElement("canvas");
+const scannerCanvasContext = scannerCanvas.getContext("2d", { willReadFrequently: true });
 
 function loadSettings() {
   const raw = localStorage.getItem(storageKey);
@@ -173,12 +175,12 @@ async function startScanner() {
   elements.unlockMessage.textContent = "";
   elements.manualUnlock.classList.remove("hidden");
 
-  if (!("BarcodeDetector" in window)) {
-    elements.unlockMessage.textContent = "このブラウザはQR読み取りに未対応です。入力で確認してください。";
-    return;
-  }
-
   try {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      elements.unlockMessage.textContent = "このブラウザではカメラを開始できません。SafariでHTTPSのURLを開いてください。";
+      return;
+    }
+
     scannerStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: "environment" },
       audio: false,
@@ -189,15 +191,37 @@ async function startScanner() {
     elements.stopCameraButton.classList.remove("hidden");
     await elements.scannerVideo.play();
 
-    const detector = new BarcodeDetector({ formats: ["qr_code"] });
-    scanLoop = window.setInterval(async () => {
-      const codes = await detector.detect(elements.scannerVideo);
-      const value = codes[0]?.rawValue;
-      if (value) validateCode(value);
-    }, 600);
-  } catch {
-    elements.unlockMessage.textContent = "カメラを開始できません。HTTPS公開や権限を確認してください。";
+    if ("BarcodeDetector" in window) {
+      const detector = new BarcodeDetector({ formats: ["qr_code"] });
+      scanLoop = window.setInterval(async () => {
+        const codes = await detector.detect(elements.scannerVideo);
+        const value = codes[0]?.rawValue;
+        if (value) validateCode(value);
+      }, 600);
+    } else if ("jsQR" in window) {
+      scanLoop = window.setInterval(scanWithJsQR, 600);
+    } else {
+      elements.unlockMessage.textContent = "QR読み取りライブラリを読み込めませんでした。入力で確認してください。";
+    }
+  } catch (error) {
+    if (location.protocol !== "https:" && location.hostname !== "localhost") {
+      elements.unlockMessage.textContent = "カメラにはHTTPSが必要です。GitHub PagesのURLをSafariで開いてください。";
+      return;
+    }
+    elements.unlockMessage.textContent = "カメラを開始できません。Safariのカメラ権限を確認してください。";
   }
+}
+
+function scanWithJsQR() {
+  if (!elements.scannerVideo.videoWidth || !elements.scannerVideo.videoHeight) return;
+
+  scannerCanvas.width = elements.scannerVideo.videoWidth;
+  scannerCanvas.height = elements.scannerVideo.videoHeight;
+  scannerCanvasContext.drawImage(elements.scannerVideo, 0, 0, scannerCanvas.width, scannerCanvas.height);
+
+  const imageData = scannerCanvasContext.getImageData(0, 0, scannerCanvas.width, scannerCanvas.height);
+  const code = window.jsQR(imageData.data, imageData.width, imageData.height);
+  if (code?.data) validateCode(code.data);
 }
 
 function stopScanner() {
