@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#e5484d" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="WakeLock" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>WakeLock</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">二度寝防止PWA</p>
+          <h1>WakeLock</h1>
+        </div>
+        <button id="installHelpButton" class="icon-button" type="button" aria-label="ホーム画面追加ヘルプ">?</button>
+      </header>
+
+      <section id="statusPanel" class="status-panel">
+        <div>
+          <p class="label">次のチェック</p>
+          <p id="nextAlarmText" class="next-time">未設定</p>
+        </div>
+        <button id="testAlarmButton" class="danger-button" type="button">今すぐ鳴らす</button>
+      </section>
+
+      <section id="ringingView" class="ringing-view hidden" aria-live="assertive">
+        <div class="pulse-ring"></div>
+        <p class="ringing-label">起床チェック</p>
+        <p class="ringing-time" id="ringingTime">07:00</p>
+        <p class="ringing-copy">登録したQRコードの場所まで移動して解除します。</p>
+        <div class="unlock-grid">
+          <button id="startScanButton" class="primary-button" type="button">QRを読み取る</button>
+          <button id="stopCameraButton" class="secondary-button hidden" type="button">カメラ停止</button>
+        </div>
+        <video id="scannerVideo" class="scanner hidden" playsinline muted></video>
+        <div id="manualUnlock" class="manual-unlock hidden">
+          <label for="manualCodeInput">カメラ非対応時の入力</label>
+          <div class="inline-form">
+            <input id="manualCodeInput" type="text" autocomplete="off" placeholder="解除コード" />
+            <button id="manualUnlockButton" type="button">確認</button>
+          </div>
+        </div>
+        <p id="unlockMessage" class="message"></p>
+        <button id="finalUnlockButton" class="unlock-button" type="button" disabled>解除する</button>
+      </section>
+
+      <section id="settingsView" class="settings-view">
+        <form id="alarmForm" class="card">
+          <div class="section-title">
+            <h2>アラーム</h2>
+            <label class="switch">
+              <input id="enabledInput" type="checkbox" />
+              <span></span>
+            </label>
+          </div>
+
+          <label class="field">
+            <span>時刻</span>
+            <input id="timeInput" type="time" required />
+          </label>
+
+          <fieldset class="weekdays">
+            <legend>曜日</legend>
+            <label><input type="checkbox" name="weekday" value="1" />月</label>
+            <label><input type="checkbox" name="weekday" value="2" />火</label>
+            <label><input type="checkbox" name="weekday" value="3" />水</label>
+            <label><input type="checkbox" name="weekday" value="4" />木</label>
+            <label><input type="checkbox" name="weekday" value="5" />金</label>
+            <label><input type="checkbox" name="weekday" value="6" />土</label>
+            <label><input type="checkbox" name="weekday" value="0" />日</label>
+          </fieldset>
+
+          <div class="method-list">
+            <p class="label">解除方法</p>
+            <label><input type="checkbox" checked disabled />QRコード</label>
+            <label class="muted"><input type="checkbox" disabled />指定場所</label>
+            <label class="muted"><input type="checkbox" disabled />カメラ認識</label>
+          </div>
+
+          <label class="field">
+            <span>解除コード</span>
+            <input id="qrCodeInput" type="text" autocomplete="off" required />
+          </label>
+
+          <div class="button-row">
+            <button id="generateCodeButton" class="secondary-button" type="button">コード生成</button>
+            <button class="primary-button" type="submit">保存</button>
+          </div>
+        </form>
+
+        <section class="card compact">
+          <h2>使い方</h2>
+          <p>解除コードでQRコードを別途作成し、洗面所や玄関に貼ります。標準アラームで起きたらこのPWAを開き、QRを読むまで停止できない流れです。</p>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="installDialog">
+      <h2>ホーム画面に追加</h2>
+      <p>Safariの共有ボタンから「ホーム画面に追加」を選ぶと、アプリ風に起動できます。カメラ読み取りはHTTPS公開したページで使ってください。</p>
+      <button id="closeInstallDialog" class="primary-button" type="button">OK</button>
+    </dialog>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

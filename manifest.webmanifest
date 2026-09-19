@@ -1,0 +1,17 @@
+{
+  "name": "WakeLock",
+  "short_name": "WakeLock",
+  "description": "QRコード解除で二度寝しにくくする目覚まし補助PWA",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fbfaf8",
+  "theme_color": "#e5484d",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
