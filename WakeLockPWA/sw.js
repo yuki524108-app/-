@@ -1,4 +1,4 @@
-const cacheName = "wakelock-pwa-v1";
+const cacheName = "wakelock-pwa-v2";
 const files = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", (event) => {
