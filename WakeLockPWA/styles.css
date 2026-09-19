@@ -1,0 +1,370 @@
+:root {
+  color-scheme: light;
+  --bg: #fbfaf8;
+  --panel: #ffffff;
+  --text: #1f2328;
+  --muted: #687076;
+  --line: #e6e1dc;
+  --accent: #e5484d;
+  --accent-dark: #c92a2f;
+  --ok: #278447;
+  --shadow: 0 18px 45px rgba(31, 35, 40, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff7f1 0%, var(--bg) 42%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(100%, 520px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(26px, env(safe-area-inset-bottom));
+}
+
+.topbar,
+.status-panel,
+.section-title,
+.button-row,
+.inline-form {
+  display: flex;
+  align-items: center;
+}
+
+.topbar,
+.section-title {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow,
+.label,
+legend {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: 34px;
+}
+
+h2 {
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--text);
+}
+
+.status-panel {
+  justify-content: space-between;
+  gap: 14px;
+  margin: 22px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.next-time {
+  margin: 4px 0 0;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.card {
+  margin: 16px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.compact p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+  font-weight: 700;
+}
+
+.field input,
+.inline-form input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #fff;
+  color: var(--text);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin: 18px 0;
+  padding: 0;
+  border: 0;
+}
+
+.weekdays legend {
+  grid-column: 1 / -1;
+}
+
+.weekdays label {
+  display: grid;
+  place-items: center;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 800;
+}
+
+.weekdays input {
+  position: absolute;
+  opacity: 0;
+}
+
+.weekdays label:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.method-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.method-list label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+}
+
+.switch span {
+  display: block;
+  width: 56px;
+  height: 32px;
+  border-radius: 999px;
+  background: #d7d2cc;
+  position: relative;
+}
+
+.switch span::after {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 3px;
+  top: 3px;
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 160ms ease;
+}
+
+.switch input:checked + span {
+  background: var(--accent);
+}
+
+.switch input:checked + span::after {
+  transform: translateX(24px);
+}
+
+.primary-button,
+.secondary-button,
+.danger-button,
+.unlock-button,
+.inline-form button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-weight: 800;
+}
+
+.primary-button,
+.unlock-button,
+.inline-form button {
+  background: var(--accent);
+  color: #fff;
+}
+
+.secondary-button {
+  background: #f1efec;
+  color: var(--text);
+}
+
+.danger-button {
+  background: var(--text);
+  color: #fff;
+}
+
+.button-row {
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ringing-view {
+  min-height: calc(100vh - 40px);
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.pulse-ring {
+  width: 118px;
+  height: 118px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 30%, #ffd6d8 31%, var(--accent) 70%);
+  animation: pulse 900ms ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.94);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+.ringing-label {
+  margin: 0;
+  color: var(--accent-dark);
+  font-weight: 900;
+}
+
+.ringing-time {
+  margin: 0;
+  font-size: clamp(62px, 20vw, 98px);
+  font-weight: 900;
+  line-height: 0.95;
+}
+
+.ringing-copy {
+  margin: 0 auto;
+  max-width: 340px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.unlock-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.scanner {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  background: #111;
+  object-fit: cover;
+}
+
+.manual-unlock {
+  text-align: left;
+}
+
+.manual-unlock label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.inline-form {
+  gap: 8px;
+}
+
+.message {
+  min-height: 24px;
+  margin: 0;
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+
+.unlock-button {
+  width: 100%;
+  font-size: 18px;
+}
+
+.unlock-button:disabled {
+  background: #d7d2cc;
+  color: #817a72;
+}
+
+dialog {
+  width: min(92vw, 390px);
+  border: 0;
+  border-radius: 8px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+dialog::backdrop {
+  background: rgba(31, 35, 40, 0.36);
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 390px) {
+  .status-panel,
+  .unlock-grid,
+  .button-row {
+    display: grid;
+  }
+}
